@@ -17,6 +17,7 @@
       "version": "detect"
     }
   },
+  "plugins": ["react-hooks"],
   "rules": {
     "arrow-body-style": "off",
     "semi": ["warn", "always"],
@@ -33,6 +34,8 @@
     "react/jsx-wrap-multilines": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks":"error",
+    "react-hooks/exhaustive-deps":["warn",{"additionalHooks":"useRecoilCallback"}],
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "import/order": "off",
