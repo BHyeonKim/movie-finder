@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
+import { MovieItemProps } from '../../types/props.d';
 import { Star } from '../../assets/svgs';
 
 import classes from './MovieItem.module.scss';
 
-const MovieItem = () => {
+const MovieItem: FC<MovieItemProps> = ({ title, year, type, poster }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -14,6 +15,7 @@ const MovieItem = () => {
 
   const clickBookmarkHandler = () => {
     setIsBookmarked((prev) => !prev);
+    setIsClicked(false);
   };
 
   const exitMenuHandler = () => {
@@ -25,7 +27,7 @@ const MovieItem = () => {
       {isClicked ? (
         <div className={classes.movieitem}>
           <div className={classes.movieitem__image}>
-            <img src={`${process.env.PUBLIC_URL}/images/ironman.jpg`} alt='ironman' />
+            <img src={poster} alt={title} />
           </div>
           <div className={isClicked ? classes.movieitem__bookmark : classes.movieitem__info}>
             <button
@@ -51,12 +53,19 @@ const MovieItem = () => {
       ) : (
         <button type='button' className={classes.movieitem} onClick={enterMenuHandler}>
           <div className={classes.movieitem__image}>
-            <img src={`${process.env.PUBLIC_URL}/images/ironman.jpg`} alt='ironman' />
+            <img src={poster} alt={title} />
           </div>
           <div className={isClicked ? classes.movieitem__bookmark : classes.movieitem__info}>
-            <h1 className={classes['movieitem__info--title']}>아이언맨</h1>
-            <div className={classes['movieitem__info--year']}>2008- 2012</div>
-            <div className={classes['movieitem__info--type']}>TV series</div>
+            <h1 className={classes['movieitem__info--title']}>{title}</h1>
+            <div className={classes['movieitem__info--year']}>{year}</div>
+            <div className={classes['movieitem__info--type']}>{type}</div>
+            <Star
+              className={`${classes['movieitem__info--bookmark']} ${
+                isBookmarked
+                  ? classes['movieitem__info--bookmark--bookmarked']
+                  : classes['movieitem__info--bookmark--unbookmarked']
+              }`}
+            />
           </div>
         </button>
       )}
