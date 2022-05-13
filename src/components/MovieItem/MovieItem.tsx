@@ -12,14 +12,6 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const setMovies = useSetRecoilState(moviesState);
   const setBookmarkList = useSetRecoilState(bookMarkState);
-  if (imdbID === 'tt0371746') {
-    console.log('bookmarked:', bookmarked);
-    console.log('isBookmarked:', isBookmarked);
-  }
-  if (imdbID === 'tt6966692') {
-    console.log('bookmarked:', bookmarked);
-    console.log('isBookmarked:', isBookmarked);
-  }
 
   const enterMenuHandler = () => {
     setIsClicked(true);
@@ -29,12 +21,20 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
   };
 
   const clickBookmarkHandler = () => {
+    // localstorage의 북마크 가져오기
+    const storedBookmarks: MovieItemDefinition[] = JSON.parse(localStorage.getItem('movies') || '[]');
+
     // 북마크에 이미 추가되있을 경우 북마크 리스트에서 뺴기
     if (isBookmarked) {
       setBookmarkList((prevList) => prevList.filter((movie) => movie.imdbID !== imdbID));
       setIsBookmarked(false);
       setIsClicked(false);
     }
+    // localstorage에 제거하기
+    localStorage.setItem(
+      'movies',
+      JSON.stringify(storedBookmarks.filter((bookmarkedMovie) => bookmarkedMovie.title !== title))
+    );
 
     // 북마크에 없을 경우 북마크 리스트에 추가하기
     if (!isBookmarked) {
@@ -53,8 +53,11 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
       setIsBookmarked(true);
       setIsClicked(false);
 
-      const storedBookmarks = JSON.parse(localStorage.getItem('movies') || '[]');
-      JSON.stringify([...storedBookmarks, { title, year, type, poster, imdbID, bookmarked: true }]);
+      // localstorage에 추가하기
+      localStorage.setItem(
+        'movies',
+        JSON.stringify([...storedBookmarks, { title, year, type, poster, imdbID, bookmarked: true }])
+      );
     }
   };
 
