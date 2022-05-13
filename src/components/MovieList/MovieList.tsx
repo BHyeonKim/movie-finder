@@ -16,18 +16,16 @@ const MovieList = () => {
   const onScrollHandler = useCallback(
     async (e: UIEvent<HTMLElement>) => {
       const scrollPosition = e.currentTarget.scrollTop + e.currentTarget.clientHeight;
-      // 로딩을 미리 앞당김
-      if (scrollPosition >= e.currentTarget.scrollHeight - e.currentTarget.clientHeight) {
+      if (scrollPosition === e.currentTarget.scrollHeight) {
         let nextPageMovies: MovieItemDefinition[];
-
         try {
           nextPageMovies = await getMoviesFromApi(keyword, page);
         } catch (error) {
           console.log(error);
+        } finally {
+          setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
+          setPage((prevPage) => prevPage + 1);
         }
-
-        setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
-        setPage((prevPage) => prevPage + 1);
       }
     },
     [setMovies, setPage, page, keyword]
@@ -41,11 +39,11 @@ const MovieList = () => {
         if (bookmarkedMovies.find((bookmarkedMovie) => bookmarkedMovie.imdbID === prevMovie.imdbID)) {
           return { ...prevMovie, bookmarked: true };
         }
-        return prevMovie;
+        return { ...prevMovie, bookmarked: false };
       });
       return [...updatedMovies];
     });
-  }, [setMovies, bookmarkedMovies]);
+  }, [setMovies, bookmarkedMovies, keyword]);
 
   return (
     <ul className={classes.movielist} onScroll={onScrollHandler}>

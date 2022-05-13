@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { bookMarkState, moviesState } from '../../state/moviesState';
@@ -12,6 +12,14 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
   const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const setMovies = useSetRecoilState(moviesState);
   const setBookmarkList = useSetRecoilState(bookMarkState);
+  if (imdbID === 'tt0371746') {
+    console.log('bookmarked:', bookmarked);
+    console.log('isBookmarked:', isBookmarked);
+  }
+  if (imdbID === 'tt6966692') {
+    console.log('bookmarked:', bookmarked);
+    console.log('isBookmarked:', isBookmarked);
+  }
 
   const enterMenuHandler = () => {
     setIsClicked(true);
@@ -49,6 +57,10 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
       JSON.stringify([...storedBookmarks, { title, year, type, poster, imdbID, bookmarked: true }]);
     }
   };
+
+  useEffect(() => {
+    setIsBookmarked(bookmarked);
+  }, [bookmarked]);
 
   return (
     <li>

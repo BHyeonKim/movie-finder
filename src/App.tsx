@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 
 import SearchBar from './components/SearchBar/SearchBar';
 import MovieList from './components/MovieList/MovieList';
-import Bookmark from './components/Bookmark/Bookmark';
+import Bookmark from './components/BookmarkList/BookmarkList';
 import Tab from './components/Tab/Tab';
 
 import classes from './App.module.scss';
