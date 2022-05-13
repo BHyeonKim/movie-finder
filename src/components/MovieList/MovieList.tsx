@@ -13,6 +13,7 @@ const MovieList = () => {
   const keyword = useRecoilValue(keywordState);
   const [page, setPage] = useState(2);
 
+  // 무한 스크롤
   const onScrollHandler = useCallback(
     async (e: UIEvent<HTMLElement>) => {
       const scrollPosition = e.currentTarget.scrollTop + e.currentTarget.clientHeight;
@@ -21,11 +22,11 @@ const MovieList = () => {
         try {
           nextPageMovies = await getMoviesFromApi(keyword, page);
         } catch (error) {
-          console.log(error);
-        } finally {
-          setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
-          setPage((prevPage) => prevPage + 1);
+          if (error instanceof Error) console.log(error.message);
+          return;
         }
+        setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
+        setPage((prevPage) => prevPage + 1);
       }
     },
     [setMovies, setPage, page, keyword]
