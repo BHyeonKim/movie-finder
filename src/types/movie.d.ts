@@ -18,4 +18,5 @@ export interface MovieItemDefinition {
   imdbID: string;
   type: string;
   poster: string;
+  bookmarked: boolean;
 }
