@@ -10,6 +10,13 @@ export const getMoviesFromApi = async (word: string, page: number) => {
   // eslint-disable-next-line no-console
 
   return response.data.Search.map((movie) => {
-    return { ...movie, title: movie.Title, year: movie.Year, type: movie.Type, poster: movie.Poster };
+    return {
+      ...movie,
+      title: movie.Title,
+      year: movie.Year,
+      type: movie.Type,
+      poster: movie.Poster,
+      bookmarked: false,
+    };
   });
 };

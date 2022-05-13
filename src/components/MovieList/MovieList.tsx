@@ -1,21 +1,22 @@
-import { UIEvent, useCallback, useState } from 'react';
+import { UIEvent, useCallback, useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import MovieItem from '../MovieItem/MovieItem';
-import { keywordState, moviesState } from '../../state/moviesState';
+import { bookMarkState, keywordState, moviesState } from '../../state/moviesState';
 
 import classes from './MovieList.module.scss';
 import { getMoviesFromApi } from '../../services/movie';
 import { MovieItemDefinition } from '../../types/movie.d';
 
 const MovieList = () => {
-  const [movies, setMovies] = useRecoilState(moviesState);
+  const [movies, setMovies] = useRecoilState<MovieItemDefinition[]>(moviesState);
+  const bookmarkedMovies = useRecoilValue(bookMarkState);
   const keyword = useRecoilValue(keywordState);
   const [page, setPage] = useState(2);
 
   const onScrollHandler = useCallback(
     async (e: UIEvent<HTMLElement>) => {
       const scrollPosition = e.currentTarget.scrollTop + e.currentTarget.clientHeight;
-      // 미리 로딩되게
+      // 로딩을 미리 앞당김
       if (scrollPosition >= e.currentTarget.scrollHeight - e.currentTarget.clientHeight) {
         let nextPageMovies: MovieItemDefinition[];
 
@@ -32,16 +33,31 @@ const MovieList = () => {
     [setMovies, setPage, page, keyword]
   );
 
+  // 검색 리스트에 북마크 된 영화 반영.
+  useEffect(() => {
+    let updatedMovies;
+    setMovies((prevMovies) => {
+      updatedMovies = prevMovies.map((prevMovie) => {
+        if (bookmarkedMovies.find((bookmarkedMovie) => bookmarkedMovie.imdbID === prevMovie.imdbID)) {
+          return { ...prevMovie, bookmarked: true };
+        }
+        return prevMovie;
+      });
+      return [...updatedMovies];
+    });
+  }, [setMovies, bookmarkedMovies]);
+
   return (
     <ul className={classes.movielist} onScroll={onScrollHandler}>
-      {movies.map((movie, index) => (
+      {movies.map((movie) => (
         <MovieItem
           title={movie.title}
           year={movie.year}
           type={movie.type}
           poster={movie.poster}
-          index={index}
+          imdbID={movie.imdbID}
           key={movie.imdbID}
+          bookmarked={movie.bookmarked}
         />
       ))}
     </ul>
