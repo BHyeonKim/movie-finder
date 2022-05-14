@@ -1,15 +1,18 @@
 import { FormEvent, useCallback, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { getMoviesFromApi } from '../../services/movie';
-import { keywordState, moviesState } from '../../state/moviesState';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+
 import MessageBox from '../MessageBox/MessageBox';
+
+import { getMoviesFromApi } from '../../services/movie';
+
+import { keywordState, moviesState } from '../../state/moviesState';
 
 import classes from './SearchBar.module.scss';
 
 const SearchBar = () => {
   const [text, setText] = useState('');
   const [resultState, setResultState] = useState('검색결과가 없습니다.');
-  const setMovies = useSetRecoilState(moviesState);
+  const [movies, setMovies] = useRecoilState(moviesState);
   const setKeyword = useSetRecoilState(keywordState);
 
   const submitHandler = useCallback(
@@ -28,8 +31,8 @@ const SearchBar = () => {
         }
         return;
       }
-      setKeyword(text);
 
+      setKeyword(text);
       setText('');
       setResultState('');
     },
@@ -49,7 +52,7 @@ const SearchBar = () => {
         value={text}
         placeholder='What is your favorite movie?'
       />
-      {resultState && <MessageBox message={resultState} />}
+      {resultState && movies.length === 0 && <MessageBox message={resultState} />}
     </form>
   );
 };
