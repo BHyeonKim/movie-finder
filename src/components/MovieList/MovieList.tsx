@@ -1,11 +1,14 @@
-import { UIEvent, useCallback, useEffect, useState } from 'react';
+import { UIEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+
 import MovieItem from '../MovieItem/MovieItem';
+
+import { getMoviesFromApi } from '../../services/movie';
+
 import { bookMarkState, keywordState, moviesState } from '../../state/moviesState';
+import { MovieItemDefinition } from '../../types/movie.d';
 
 import classes from './MovieList.module.scss';
-import { getMoviesFromApi } from '../../services/movie';
-import { MovieItemDefinition } from '../../types/movie.d';
 
 const MovieList = () => {
   const [movies, setMovies] = useRecoilState<MovieItemDefinition[]>(moviesState);
@@ -24,9 +27,10 @@ const MovieList = () => {
         } catch (error) {
           if (error instanceof Error) console.log(error.message);
           return;
+        } finally {
+          setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
+          setPage((prevPage) => prevPage + 1);
         }
-        setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
-        setPage((prevPage) => prevPage + 1);
       }
     },
     [setMovies, setPage, page, keyword]
@@ -46,19 +50,23 @@ const MovieList = () => {
     });
   }, [setMovies, bookmarkedMovies, keyword]);
 
+  const itemList = useMemo(() => {
+    return movies.map((movie) => (
+      <MovieItem
+        title={movie.title}
+        year={movie.year}
+        type={movie.type}
+        poster={movie.poster}
+        imdbID={movie.imdbID}
+        key={movie.imdbID}
+        bookmarked={movie.bookmarked}
+      />
+    ));
+  }, [movies]);
+
   return (
     <ul className={classes.movielist} onScroll={onScrollHandler}>
-      {movies.map((movie) => (
-        <MovieItem
-          title={movie.title}
-          year={movie.year}
-          type={movie.type}
-          poster={movie.poster}
-          imdbID={movie.imdbID}
-          key={movie.imdbID}
-          bookmarked={movie.bookmarked}
-        />
-      ))}
+      {itemList}
     </ul>
   );
 };

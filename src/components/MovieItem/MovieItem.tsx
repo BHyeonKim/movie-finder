@@ -1,11 +1,12 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+
+import { Star } from '../../assets/svgs';
 
 import { bookMarkState, moviesState } from '../../state/moviesState';
 import { MovieItemDefinition } from '../../types/movie.d';
 
 import classes from './MovieItem.module.scss';
-import { Star } from '../../assets/svgs';
 
 const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID, bookmarked }) => {
   const [isClicked, setIsClicked] = useState(false);
@@ -20,7 +21,7 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
     setIsClicked(false);
   };
 
-  const clickBookmarkHandler = () => {
+  const clickBookmarkHandler = useCallback(() => {
     // localstorage의 북마크 가져오기
     const storedBookmarks: MovieItemDefinition[] = JSON.parse(localStorage.getItem('movies') || '[]');
 
@@ -59,7 +60,7 @@ const MovieItem: FC<MovieItemDefinition> = ({ title, year, type, poster, imdbID,
         JSON.stringify([...storedBookmarks, { title, year, type, poster, imdbID, bookmarked: true }])
       );
     }
-  };
+  }, [imdbID, isBookmarked, poster, setBookmarkList, setMovies, title, type, year]);
 
   useEffect(() => {
     setIsBookmarked(bookmarked);

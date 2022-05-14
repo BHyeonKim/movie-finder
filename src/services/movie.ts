@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import { MovieAPIResDefinition } from '../types/movie.d';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;

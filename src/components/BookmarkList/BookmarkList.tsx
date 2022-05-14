@@ -1,6 +1,9 @@
 import { useRecoilValue } from 'recoil';
-import { bookMarkState } from '../../state/moviesState';
+
 import MovieItem from '../MovieItem/MovieItem';
+
+import { bookMarkState } from '../../state/moviesState';
+
 import classes from './BookmarkList.module.scss';
 
 const Bookmark = () => {
