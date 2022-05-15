@@ -1,4 +1,4 @@
-import { UIEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { UIEvent, useCallback, useEffect, useMemo, useState, Suspense } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import MovieItem from '../MovieItem/MovieItem';
@@ -28,9 +28,10 @@ const MovieList = () => {
           if (error instanceof Error) console.log(error.message);
           return;
         } finally {
-          setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
           setPage((prevPage) => prevPage + 1);
         }
+
+        setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
       }
     },
     [setMovies, setPage, page, keyword]
@@ -66,7 +67,13 @@ const MovieList = () => {
 
   return (
     <ul className={classes.movielist} onScroll={onScrollHandler}>
-      {itemList}
+      <Suspense
+        fallback={
+          <h1 style={{ color: 'orange', width: '100px', height: '50px', backgroundColor: 'maroon' }}>Loading data</h1>
+        }
+      >
+        {itemList}
+      </Suspense>
     </ul>
   );
 };

@@ -10,7 +10,7 @@ import { bookMarkState } from './state/moviesState';
 
 import classes from './App.module.scss';
 import { MovieItemDefinition } from './types/movie.d';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 const App = () => {
   const setBookmark = useSetRecoilState(bookMarkState);
