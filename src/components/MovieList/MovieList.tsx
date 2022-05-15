@@ -30,6 +30,7 @@ const MovieList = () => {
         } finally {
           setPage((prevPage) => prevPage + 1);
         }
+        if (!nextPageMovies.length) return;
 
         setMovies((prevMovies) => [...prevMovies, ...nextPageMovies]);
       }
