@@ -1,1 +1,11 @@
+@use './styles/constants/colors' as color;
 
+.app {
+  position: relative;
+  width: 360px;
+  height: 740px;
+  margin: 3rem auto;
+  background-color: #030001;
+  border-radius: 4rem;
+  box-shadow: 0 2px 6px rgba($color: color.$BLACK, $alpha: 30%);
+}

@@ -1,0 +1,53 @@
+@use '../../styles/constants/colors' as color;
+
+.tab {
+  position: fixed;
+  top: 730px;
+  left: 50%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 8rem;
+  height: 3rem;
+  background-color: color.$TAB_COLOR;
+  border-radius: 4rem;
+  transform: translatex(-50%);
+
+  &__icon {
+    z-index: 100;
+    width: 25px;
+  }
+}
+
+.slider {
+  position: absolute;
+  z-index: 50;
+  width: 4rem;
+  height: 2.3rem;
+  background-color: color.$MAIN_COLOR;
+  border-radius: 1.5rem;
+  transition: all 0.2s ease-in-out;
+  transform: translateX(-1.7rem);
+
+  &--active {
+    position: absolute;
+    z-index: 50;
+    width: 4rem;
+    height: 2.3rem;
+    background-color: color.$MAIN_COLOR;
+    border-radius: 1.5rem;
+    transition: all 0.2s ease-in-out;
+    transform: translateX(1.7rem);
+  }
+}
+
+.bookmark {
+  width: 1.3rem;
+  fill: #ffffff;
+}
+
+.search {
+  width: 1.6rem;
+  fill: #ffffff;
+}
